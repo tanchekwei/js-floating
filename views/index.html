@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/currency.js@~2.0.0/dist/currency.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+      integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <button onclick="sendRequest()">Submit</button>
+    <script>
+      function sendRequest() {
+        wttURL = [];
+        for (let index = 301; index < 400; index++) {
+          // var num1 = 1.0 + (index / 100);
+          // var num2 = 0.001 * index;
+          var num1 = 4.7400
+          var num2 = 0.3740
+          var queryString = $.param({
+            num1: num1,
+            num2: num2,
+            vanillaTotal: num1 * num2,
+            currencyJsTotal: currency(num1, { precision: 3 }).multiply(num2).value,
+            toFixedTotal: parseFloat((num1 * num2).toFixed(3)),
+          });
+          if (queryString.toFixedTotal !== queryString.currencyJsTotal) {
+            console.log('oh no')
+          }
+          wttURL.push(fetch("https://localhost:44329/job/js?" + queryString 
+            // {
+            //   headers: {
+            //     'Access-Control-Allow-Origin': '*',
+            //     "Access-Control-Allow-Credentials": "true",
+            //     "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+            //     "Access-Control-Allow-Heaers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+
+            //   }}
+            ))
+        }
+        Promise.all(wttURL)
+    .then(responses => responses.forEach(response => console.log(response)))
+    .catch(err => console.log(err));
+
+      }
+    </script>
+  </body>
+</html>
